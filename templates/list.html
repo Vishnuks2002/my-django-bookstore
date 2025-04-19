@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<hr>
+
+<div class="row">
+  {% for each in object_list %}
+  <div class="col">
+    <div class="card" style="width: 13rem;">
+      <img src="{{ each.image_url }}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">{{ each.title|slice:":25"}} ...</h5>
+        <p class="card-text">${{ each.price|floatformat:2 }}</p>
+        
+        {% if each.book_available is True %}
+        <li class="text-primary">Available</li>
+        {% else %}
+        <li class="text-danger">Out of Stock !</li>
+        {% endif %}<br>
+
+        <a href="{% url 'detail' each.id %}" class="btn btn-primary">View</a>
+        
+        <!-- Remove nested for loop and just use the current book "each" -->
+        {% if each.id %}
+        <a href="{% url 'add_to_cart' each.id %}" class="btn btn-success">Add to Cart</a>
+        {% else %}
+        <p>Error: Book ID missing</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock content %}

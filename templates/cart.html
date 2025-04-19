@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">🛒 Your Cart</h2>
+
+{% if cart_items %}
+  <div class="row">
+    {% for item in cart_items %}
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <img src="{{ item.book.image_url }}" class="card-img-top" alt="{{ item.book.title }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ item.book.title }}</h5>
+            <p class="card-text"><strong>Author:</strong> {{ item.book.author }}</p>
+            <p class="card-text"><strong>Quantity:</strong> {{ item.quantity }}</p>
+            <p class="card-text"><strong>Price:</strong> ₹{{ item.total_price }}</p>
+            
+            <form action="{% url 'remove_from_cart' item.book.id %}" method="POST">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger mt-2">Remove</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <p><strong>Total: ₹{{ total_cost }}</strong></p>
+  <a href="#" class="btn btn-primary">Proceed to Checkout</a>
+{% else %}
+  <p class="text-muted">Your cart is empty.</p>
+{% endif %}
+
+{% endblock %}
