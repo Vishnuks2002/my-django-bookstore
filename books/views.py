@@ -52,39 +52,38 @@ def paymentComplete(request):
 def add_to_cart(request, book_id):
     book = get_object_or_404(Book, id=book_id)
 
-    # Check if 'cart' exists and is a list, otherwise create it
+    
     cart = request.session.get('cart')
     if not isinstance(cart, list):
         cart = []
 
-    # Add the book_id if not already in cart
+    
     if book_id not in cart:
         cart.append(book_id)
 
-    # Save back to session
+    
     request.session['cart'] = cart
 
-    # Redirect back to previous page
+   
     referer = request.META.get('HTTP_REFERER', '/')
     return HttpResponseRedirect(referer)
 
 
 def cart_view(request):
-    # Access cart from session
+    
     cart = request.session.get('cart', [])
 
-    # Initialize empty cart items
+    
     cart_items = []
     total_cost = 0
 
-    # If cart is a list of book IDs, convert it into a dictionary
     if isinstance(cart, list):
         cart = {str(book_id): cart.count(book_id) for book_id in cart}
 
     book_ids = cart.keys()
     books = Book.objects.filter(id__in=book_ids)
 
-    # Process cart items
+    
     for book in books:
         quantity = cart.get(str(book.id), 0) or cart.get(book.id, 0)
         cart_items.append({
@@ -95,7 +94,7 @@ def cart_view(request):
 
     total_cost = sum(item['total_price'] for item in cart_items)
 
-    # Render the cart template
+    
     return render(request, 'cart.html', {
         'cart_items': cart_items,
         'total_cost': total_cost

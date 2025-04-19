@@ -24,7 +24,7 @@ class Order(models.Model):
         return self.product.title
 
 
-# ✅ New models added below
+
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
